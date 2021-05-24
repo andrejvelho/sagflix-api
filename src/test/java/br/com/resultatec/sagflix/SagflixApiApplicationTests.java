@@ -1,4 +1,4 @@
-package br.com.resultatec.sagflixapi;
+package br.com.resultatec.sagflix;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
