@@ -23,7 +23,7 @@ public class ManterCategoriaService {
         .stream()
         .anyMatch(c -> !c.equals(categoria));
 
-        if (nomeCategoriaEmUso) throw new NegocioExeption("Categoria.titulo.em.uso");
+        if (nomeCategoriaEmUso) throw new NegocioExeption("categoria.titulo.em.uso");
 
         categoria.publicar();
 

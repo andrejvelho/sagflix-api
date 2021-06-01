@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,7 +21,6 @@ import br.com.resultatec.sagflix.api.exceptionhandler.Problema.Campo;
 import br.com.resultatec.sagflix.domain.exception.EntidadeNaoEncontraException;
 import br.com.resultatec.sagflix.domain.exception.NegocioExeption;
 
-@JsonInclude(Include.NON_NULL)
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     
@@ -46,7 +42,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problema problema = getProblema(
             status,
-            "Preenchimento.campos.obrigatorio.titulo", 
+            "preenchimento.campos.obrigatorio.titulo", 
             campos);
 
         return super.handleExceptionInternal(ex, problema, headers, status, request);
@@ -74,13 +70,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private Problema getProblema(HttpStatus status, String mensagem, List<Campo> campos) {
 
-       // String mensagemTranslater = messageSource.getMessage(mensagem, null, LocaleContextHolder.getLocale());
+        String mensagemTranslater = messageSource.getMessage(mensagem, null, LocaleContextHolder.getLocale());
 
         return  Problema
         .builder()
         .status(status.value())
         .dataHora(LocalDateTime.now())
-        .titulo(mensagem)
+        .titulo(mensagemTranslater)
         .campos(campos)
         .build();
     }
