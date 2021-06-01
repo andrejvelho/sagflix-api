@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.repository.CategoriaRepository;
-import br.com.resultatec.sagflix.domain.service.ManterCategoriaService;
+import br.com.resultatec.sagflix.domain.service.CatalogoCategoriaService;
 
 @RestController
 @RequestMapping("/categorias")
@@ -29,7 +29,7 @@ public class CategoriaController {
     CategoriaRepository categoriaRepository;
     
     @Autowired
-    ManterCategoriaService manterCategoriaService;
+    CatalogoCategoriaService catalogoCategoriaService;
 
     @GetMapping
     public List<Categoria> findAll() {
@@ -47,7 +47,7 @@ public class CategoriaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Categoria insert(@Valid @RequestBody Categoria categoria) {
-        return manterCategoriaService.save(categoria);
+        return catalogoCategoriaService.save(categoria);
     }
 
     @PutMapping("/{categoriaId}")
@@ -56,7 +56,7 @@ public class CategoriaController {
         if (!categoriaRepository.existsById(categoriaId)) return ResponseEntity.notFound().build();
     
         categoria.setId(categoriaId);
-        categoria = manterCategoriaService.save(categoria);
+        categoria = catalogoCategoriaService.save(categoria);
         
         return ResponseEntity.ok(categoria);
     }
@@ -65,7 +65,7 @@ public class CategoriaController {
     public ResponseEntity<Void> delete(@PathVariable("categoriaId") Long categoriaId) {
 
 
-        manterCategoriaService.deleteById(categoriaId);
+        catalogoCategoriaService.deleteById(categoriaId);
 
         return ResponseEntity.noContent().build();
     }

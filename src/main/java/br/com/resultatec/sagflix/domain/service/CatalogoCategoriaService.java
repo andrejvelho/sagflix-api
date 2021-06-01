@@ -10,7 +10,7 @@ import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.repository.CategoriaRepository;
 
 @Service
-public class ManterCategoriaService {
+public class CatalogoCategoriaService {
     
     @Autowired 
     CategoriaRepository categoriaRepository;
@@ -40,6 +40,6 @@ public class ManterCategoriaService {
 
     public Categoria buscarOuFalhar(Long categoriaId) {
         return categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new EntidadeNaoEncontraException("Não encontramos a pessoa com esse identificador"));
+                .orElseThrow(() -> new EntidadeNaoEncontraException("categoria.nao.encontrada"));
     }
 }
