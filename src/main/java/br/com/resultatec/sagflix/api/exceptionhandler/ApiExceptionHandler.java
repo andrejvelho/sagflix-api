@@ -1,6 +1,6 @@
 package br.com.resultatec.sagflix.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +75,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return  Problema
         .builder()
         .status(status.value())
-        .dataHora(LocalDateTime.now())
+        .dataHora(OffsetDateTime.now())
         .titulo(mensagemTranslater)
         .campos(campos)
         .build();

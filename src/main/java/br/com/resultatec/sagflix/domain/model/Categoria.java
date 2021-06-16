@@ -1,6 +1,6 @@
 package br.com.resultatec.sagflix.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.validation.Valid;
 
@@ -46,6 +46,7 @@ public class Categoria {
     private String cor;
     
     @Size(max = 255)
+    @NotBlank
     private String link;
 
     @Valid
@@ -58,12 +59,12 @@ public class Categoria {
     private StatusCategoria statusCategoria;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime dataCadastro;
+    private OffsetDateTime dataCadastro;
 
     public void publicar() {
 
         if (this.getId() == null) {
-            this.setDataCadastro(LocalDateTime.now());
+            this.setDataCadastro(OffsetDateTime.now());
             this.setStatusCategoria(StatusCategoria.ATIVO);
         }
         

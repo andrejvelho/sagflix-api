@@ -3,6 +3,7 @@ package br.com.resultatec.sagflix.domain.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.resultatec.sagflix.domain.exception.EntidadeNaoEncontraException;
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.model.Video;
 import br.com.resultatec.sagflix.domain.repository.VideoRepository;
@@ -21,5 +22,10 @@ public class CatalogoVideoService {
         video.setCategoria(categoria);
 
         return videoRepository.save(video);
+    }
+
+    public Video buscarOuFalhar(Long videoId) {
+        return videoRepository.findById(videoId)
+                .orElseThrow(() -> new EntidadeNaoEncontraException("video.nao.encontrada"));
     }
 }
