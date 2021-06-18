@@ -36,7 +36,7 @@ public class ControllerComentarioVideoController {
     public ComentarioVideoModel comentar(@PathVariable("videoId") Long videoId, 
         @Valid @RequestBody ComentarioVideoInput comentarioVideoInput) {
 
-        var comentarioVideoRegistrado = comentarioVideoService.registrar(videoId, comentarioVideoInput.getComentario());
+        ComentarioVideo comentarioVideoRegistrado = comentarioVideoService.registrar(videoId, comentarioVideoInput.getComentario());
 
         return comentarioVideoAssembler.toModel(comentarioVideoRegistrado);
     }
