@@ -40,7 +40,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             }
         );
 
-        Problema problema = getProblema(
+        Problema problema = createProblema(
             status,
             "preenchimento.campos.obrigatorio.titulo", 
             campos);
@@ -48,14 +48,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(ex, problema, headers, status, request);
     } 
 
+    public ResponseEntity<Object> handlerException(Exception ex, WebRequest webRequest,  HttpStatus status) {
+        Problema problema = createProblema(status, ex.getMessage(), null );
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, webRequest);
+    }
+
     @ExceptionHandler(NegocioExeption.class)
     public ResponseEntity <Object> handlerNegocioException(NegocioExeption ex, WebRequest webRequest) {
      
         HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        Problema problema = getProblema(status, ex.getMessage(), null);
-
-        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, webRequest);
+        
+        return handlerException(ex, webRequest, status);
     }
 
     @ExceptionHandler(EntidadeNaoEncontraException.class)
@@ -63,12 +67,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
              
         HttpStatus status = HttpStatus.NOT_FOUND;
 
-        Problema problema = getProblema(status, ex.getMessage(), null);
-
-        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, webRequest);
+        return handlerException(ex, webRequest, status);
+      
     }
+    
 
-    private Problema getProblema(HttpStatus status, String mensagem, List<Campo> campos) {
+    private Problema createProblema(HttpStatus status, String mensagem, List<Campo> campos) {
 
         String mensagemTranslater = messageSource.getMessage(mensagem, null, LocaleContextHolder.getLocale());
 

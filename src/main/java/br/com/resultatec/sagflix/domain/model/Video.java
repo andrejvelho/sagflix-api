@@ -1,10 +1,16 @@
 package br.com.resultatec.sagflix.domain.model;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,4 +47,19 @@ public class Video {
     @ManyToOne
     private Categoria categoria;
 
+    @OneToMany(mappedBy = "video", cascade = CascadeType.ALL)
+    List<ComentarioVideo> comentarios = new ArrayList<>();
+
+    public ComentarioVideo adicionarNovoComentario(String comentario) {
+
+        ComentarioVideo comentarioVideo = new ComentarioVideo();
+
+        comentarioVideo.setComentario(comentario);
+        comentarioVideo.setVideo(this);
+        comentarioVideo.setDataRegistro(OffsetDateTime.now());
+
+        this.getComentarios().add(comentarioVideo);
+
+        return comentarioVideo;
+    }
 }

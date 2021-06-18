@@ -18,12 +18,12 @@ public class CatalogoCategoriaService {
     @Transactional
     public Categoria save(Categoria categoria) {
 
-        boolean nomeCategoriaEmUso = categoriaRepository
+        boolean tituloCategoriaEmUso = categoriaRepository
         .findByTitulo(categoria.getTitulo())
         .stream()
         .anyMatch(c -> !c.equals(categoria));
 
-        if (nomeCategoriaEmUso) throw new NegocioExeption("categoria.titulo.em.uso");
+        if (tituloCategoriaEmUso) throw new NegocioExeption("categoria.titulo.em.uso");
 
         categoria.publicar();
 

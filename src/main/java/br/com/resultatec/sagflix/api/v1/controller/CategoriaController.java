@@ -52,11 +52,11 @@ public class CategoriaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CategoriaModel> insert(@Valid @RequestBody CategoriaInput categoriaInput) {
+    public CategoriaModel save(@Valid @RequestBody CategoriaInput categoriaInput) {
         Categoria novaCategoria = categoriaAssembler.toEntity(categoriaInput);
         Categoria categoriaSalva = catalogoCategoriaService.save(novaCategoria);
 
-        return ResponseEntity.ok(categoriaAssembler.toModel(categoriaSalva));
+        return categoriaAssembler.toModel(categoriaSalva);
     }
 
     @PutMapping("/{categoriaId}")

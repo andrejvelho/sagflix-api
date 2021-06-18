@@ -42,22 +42,22 @@ public class VideoController {
         return videoAssembler.toCollectionModel(videoRepository.findAll());
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<VideoModel> insert(@Valid @RequestBody VideoInput videoInput) {
-
-        Video novoVideo = videoAssembler.toEntity(videoInput);
-        Video videoSalvo = catalogoVideoService.save(novoVideo);
-
-        return ResponseEntity.ok(videoAssembler.toModel(videoSalvo));
-    }
-
     @GetMapping("/{videoId}")
     public ResponseEntity<VideoModel> findAllById(@PathVariable("videoId") Long videoId) {
 
         return videoRepository.findById(videoId)
         .map(video -> ResponseEntity.ok(videoAssembler.toModel(video)))
         .orElse(ResponseEntity.noContent().build());
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public VideoModel save(@Valid @RequestBody VideoInput videoInput) {
+
+        Video novoVideo = videoAssembler.toEntity(videoInput);
+        Video videoSalvo = catalogoVideoService.save(novoVideo);
+
+        return videoAssembler.toModel(videoSalvo);
     }
 
     @PutMapping("/{videoId}")
@@ -77,7 +77,7 @@ public class VideoController {
     @DeleteMapping("/{videoId}")
     public ResponseEntity<Void> delete(@PathVariable("videoId") Long videoId) {
 
-        videoRepository.deleteById(videoId);
+        catalogoVideoService.deleteById(videoId);
 
         return ResponseEntity.noContent().build();
     }

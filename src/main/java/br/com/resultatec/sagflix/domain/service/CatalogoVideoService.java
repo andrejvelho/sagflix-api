@@ -1,9 +1,10 @@
 package br.com.resultatec.sagflix.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.resultatec.sagflix.domain.exception.EntidadeNaoEncontraException;
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.model.Video;
 import br.com.resultatec.sagflix.domain.repository.VideoRepository;
@@ -11,10 +12,11 @@ import br.com.resultatec.sagflix.domain.repository.VideoRepository;
 @Service
 public class CatalogoVideoService {
     
-    @Autowired VideoRepository videoRepository;
-
-    @Autowired CatalogoCategoriaService catalogoCategoriaService;
+    @Autowired private VideoRepository videoRepository;
+    @Autowired private CatalogoCategoriaService catalogoCategoriaService;
+    @Autowired private BuscarVideoService buscarVideoService;
     
+    @Transactional
     public Video save(Video video) {
 
         Categoria categoria = catalogoCategoriaService.buscarOuFalhar(video.getCategoria().getId());
@@ -24,8 +26,11 @@ public class CatalogoVideoService {
         return videoRepository.save(video);
     }
 
-    public Video buscarOuFalhar(Long videoId) {
-        return videoRepository.findById(videoId)
-                .orElseThrow(() -> new EntidadeNaoEncontraException("video.nao.encontrada"));
+    @Transactional
+    public void deleteById(Long videoId) {
+        Video videoEncontrado = buscarVideoService.buscar(videoId);
+
+        videoRepository.delete(videoEncontrado);
     }
+ 
 }

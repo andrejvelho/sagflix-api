@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,9 @@ import br.com.resultatec.sagflix.domain.validation.ValidationGroups;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -60,6 +64,9 @@ public class Categoria {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime dataCadastro;
+ 
+    @OneToMany(mappedBy = "categoria")
+    private List<Video> videos = new ArrayList<>();
 
     public void publicar() {
 
