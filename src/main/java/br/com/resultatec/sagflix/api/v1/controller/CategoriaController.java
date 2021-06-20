@@ -22,20 +22,19 @@ import br.com.resultatec.sagflix.api.v1.model.input.CategoriaInput;
 import br.com.resultatec.sagflix.api.v1.model.representation.CategoriaModel;
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.repository.CategoriaRepository;
+import br.com.resultatec.sagflix.domain.service.AtivarCategoriaService;
 import br.com.resultatec.sagflix.domain.service.CatalogoCategoriaService;
+import br.com.resultatec.sagflix.domain.service.InativarCategoriaService;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
     
-    @Autowired 
-    private CategoriaRepository categoriaRepository;
-    
-    @Autowired
-    private CatalogoCategoriaService catalogoCategoriaService;
-
-    @Autowired
-    private CategoriaAssembler categoriaAssembler;
+    @Autowired private CategoriaRepository categoriaRepository;
+    @Autowired private CatalogoCategoriaService catalogoCategoriaService;
+    @Autowired private CategoriaAssembler categoriaAssembler;
+    @Autowired private InativarCategoriaService inativarCategoriaService;
+    @Autowired private AtivarCategoriaService ativarCategoriaService;
 
     @GetMapping
     public List<CategoriaModel> findAll() {
@@ -78,6 +77,18 @@ public class CategoriaController {
         catalogoCategoriaService.deleteById(categoriaId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{categoriaId}/inativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable("categoriaId") Long categoriaId) {
+        inativarCategoriaService.inativar(categoriaId);
+    }
+
+    @PutMapping("/{categoriaId}/ativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarinativar(@PathVariable("categoriaId") Long categoriaId) {
+        ativarCategoriaService.ativar(categoriaId);
     }
         
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.resultatec.sagflix.domain.exception.EntidadeNaoEncontraException;
 import br.com.resultatec.sagflix.domain.exception.NegocioExeption;
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.repository.CategoriaRepository;
@@ -14,6 +13,8 @@ public class CatalogoCategoriaService {
     
     @Autowired 
     CategoriaRepository categoriaRepository;
+
+    @Autowired private BuscarCategoriaService buscarCategoriaService;
 
     @Transactional
     public Categoria save(Categoria categoria) {
@@ -33,13 +34,10 @@ public class CatalogoCategoriaService {
     @Transactional
     public void deleteById(Long categoriaId) {
 
-        Categoria categoriaIsExist = buscarOuFalhar(categoriaId);
+        Categoria categoriaIsExist = buscarCategoriaService.buscar(categoriaId);
 
         categoriaRepository.delete(categoriaIsExist);
     }
 
-    public Categoria buscarOuFalhar(Long categoriaId) {
-        return categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new EntidadeNaoEncontraException("categoria.nao.encontrada"));
-    }
+  
 }

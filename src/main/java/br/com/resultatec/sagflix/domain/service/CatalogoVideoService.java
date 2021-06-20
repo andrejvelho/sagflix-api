@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.resultatec.sagflix.domain.exception.NegocioExeption;
 import br.com.resultatec.sagflix.domain.model.Categoria;
 import br.com.resultatec.sagflix.domain.model.Video;
 import br.com.resultatec.sagflix.domain.repository.VideoRepository;
@@ -13,15 +14,19 @@ import br.com.resultatec.sagflix.domain.repository.VideoRepository;
 public class CatalogoVideoService {
     
     @Autowired private VideoRepository videoRepository;
-    @Autowired private CatalogoCategoriaService catalogoCategoriaService;
     @Autowired private BuscarVideoService buscarVideoService;
+    @Autowired private BuscarCategoriaService buscarCategoriaService;
     
     @Transactional
     public Video save(Video video) {
 
-        Categoria categoria = catalogoCategoriaService.buscarOuFalhar(video.getCategoria().getId());
+        Categoria categoriaEncontrada = buscarCategoriaService.buscar(video.getCategoria().getId());
 
-        video.setCategoria(categoria);
+        if (categoriaEncontrada.inativa()) {
+            throw new NegocioExeption("video.nao.pode.ser.incluido.categoria.inativa");
+        }
+
+        video.setCategoria(categoriaEncontrada);
 
         return videoRepository.save(video);
     }

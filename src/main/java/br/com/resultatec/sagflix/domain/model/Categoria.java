@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.resultatec.sagflix.domain.validation.ValidationGroups;
 
+import br.com.resultatec.sagflix.domain.exception.NegocioExeption;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,4 +78,46 @@ public class Categoria {
         }
         
     }
+
+    public void inativar() {
+
+        if (naoPodeSerInativada()) {
+            throw new NegocioExeption("categoria.nao.pode.ser.inativada");
+        }
+
+        setStatusCategoria(StatusCategoria.INATIVO);
+    }
+
+    public void ativar() {
+        if (naoPodeSerAtivada()) {
+            throw new NegocioExeption("categoria.ja.ativa");
+        }
+
+        setStatusCategoria(StatusCategoria.ATIVO);
+    }
+
+    public boolean podeSerAtivada() {
+        return StatusCategoria.INATIVO.equals(getStatusCategoria());
+    }
+
+    public boolean naoPodeSerAtivada() {
+        return !podeSerAtivada();
+    }
+
+    public boolean podeSerInativada() {
+        return StatusCategoria.ATIVO.equals(getStatusCategoria());
+    }
+
+    public boolean naoPodeSerInativada() {
+        return !podeSerInativada();
+    }
+
+    public boolean ativa() {
+        return getStatusCategoria().equals(StatusCategoria.ATIVO);
+    }
+
+    public boolean inativa() {
+        return getStatusCategoria().equals(StatusCategoria.INATIVO);
+    }
+
 }
