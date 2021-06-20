@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 
  
 @JsonInclude(Include.NON_NULL)
@@ -22,6 +23,7 @@ public class Problema {
     private OffsetDateTime dataHora;
     private String titulo;
 
+    @Singular(value = "adicionarCampo")
     private List<Campo> campos;
 
     @AllArgsConstructor
