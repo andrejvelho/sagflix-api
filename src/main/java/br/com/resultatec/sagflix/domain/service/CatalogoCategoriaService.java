@@ -20,11 +20,13 @@ public class CatalogoCategoriaService {
     public Categoria save(Categoria categoria) {
 
         boolean tituloCategoriaEmUso = categoriaRepository
-        .findByTitulo(categoria.getTitulo())
-        .stream()
-        .anyMatch(c -> !c.equals(categoria));
+            .findByTitulo(categoria.getTitulo())
+            .stream()
+            .anyMatch(c -> !c.equals(categoria));
 
-        if (tituloCategoriaEmUso) throw new NegocioExeption("categoria.titulo.em.uso");
+        if (tituloCategoriaEmUso) {
+            throw new NegocioExeption("categoria.titulo.em.uso");
+        }
 
         categoria.publicar();
 

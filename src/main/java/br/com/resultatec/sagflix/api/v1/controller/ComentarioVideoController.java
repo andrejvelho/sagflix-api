@@ -21,9 +21,10 @@ import br.com.resultatec.sagflix.domain.model.ComentarioVideo;
 import br.com.resultatec.sagflix.domain.model.Video;
 import br.com.resultatec.sagflix.domain.service.BuscarVideoService;
 import br.com.resultatec.sagflix.domain.service.RegistrarComentarioVideoService;
+
 @RestController
 @RequestMapping("/videos/{videoId}/comentarios")
-public class ControllerComentarioVideoController {
+public class ComentarioVideoController {
     
     @Autowired private RegistrarComentarioVideoService comentarioVideoService;
     @Autowired private ComentarioVideoAssembler comentarioVideoAssembler;

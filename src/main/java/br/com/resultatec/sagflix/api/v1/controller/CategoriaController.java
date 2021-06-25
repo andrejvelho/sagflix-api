@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.resultatec.sagflix.domain.service.BuscarCategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,9 @@ import br.com.resultatec.sagflix.domain.service.InativarCategoriaService;
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
-    
+
     @Autowired private CategoriaRepository categoriaRepository;
+    @Autowired private BuscarCategoriaService buscarCategoriaService;
     @Autowired private CatalogoCategoriaService catalogoCategoriaService;
     @Autowired private CategoriaAssembler categoriaAssembler;
     @Autowired private InativarCategoriaService inativarCategoriaService;
@@ -44,25 +46,36 @@ public class CategoriaController {
     @GetMapping("/{categoriaId}")
     public ResponseEntity<CategoriaModel> findAllById(@PathVariable("categoriaId") Long categoriaId) {
 
-        return categoriaRepository.findById(categoriaId)
-        .map(categoria -> ResponseEntity.ok(categoriaAssembler.toModel(categoria)))
-        .orElse(ResponseEntity.noContent().build());
+        if (categoriaId < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        Categoria categoriaEncontrada = buscarCategoriaService.buscar(categoriaId);
+
+        if (categoriaEncontrada == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(categoriaAssembler.toModel(categoriaEncontrada));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoriaModel save(@Valid @RequestBody CategoriaInput categoriaInput) {
+
         Categoria novaCategoria = categoriaAssembler.toEntity(categoriaInput);
+
         Categoria categoriaSalva = catalogoCategoriaService.save(novaCategoria);
 
         return categoriaAssembler.toModel(categoriaSalva);
     }
 
     @PutMapping("/{categoriaId}")
-    public ResponseEntity<CategoriaModel> update(@PathVariable("categoriaId") Long categoriaId, @Valid @RequestBody CategoriaInput categoriaInput) {
+    public ResponseEntity<CategoriaModel> update(@PathVariable("categoriaId") Long categoriaId, 
+        @Valid @RequestBody CategoriaInput categoriaInput) {
 
-        if (!categoriaRepository.existsById(categoriaId)) return ResponseEntity.notFound().build();
-    
+        if (buscarCategoriaService.notExist(categoriaId)) {
+            return ResponseEntity.notFound().build();
+        }
+
         Categoria novaCategoria = categoriaAssembler.toEntity(categoriaInput);
 
         novaCategoria.setId(categoriaId);
@@ -87,7 +100,7 @@ public class CategoriaController {
 
     @PutMapping("/{categoriaId}/ativar")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativarinativar(@PathVariable("categoriaId") Long categoriaId) {
+    public void ativar(@PathVariable("categoriaId") Long categoriaId) {
         ativarCategoriaService.ativar(categoriaId);
     }
         

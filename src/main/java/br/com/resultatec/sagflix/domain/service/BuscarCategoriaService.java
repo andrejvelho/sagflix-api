@@ -17,4 +17,12 @@ public class BuscarCategoriaService {
                 .orElseThrow(() -> new EntidadeNaoEncontraException("categoria.nao.encontrada"));
     }
 
+    public boolean exists(Long categoriaId) {
+        return categoriaRepository.existsById(categoriaId);
+    }
+
+    public boolean notExist(Long categoriaId) {
+        return !exists(categoriaId);
+    }
+
 }
